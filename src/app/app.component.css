@@ -1,4 +1,10 @@
 header {
     background-color: rgba(0,0,0,0.75);
     color: #fff;
+    position: fixed;
+    z-index: 99;
+}
+
+.content {
+    margin: 56px 0;
 }

@@ -1,0 +1,26 @@
+<div class="col-xs-12 tile">
+    <div class="col-xs-12 col-md-8">
+        <h4 class="text-uppercase text-muted">Season's Matches</h4>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-4">
+        <input #globalFilter type="text" placeholder="Search" class="col-xs-12">
+    </div>
+    <div class="col-xs-12">
+        <p-dataTable [value]="matches" [globalFilter]="globalFilter">
+            <p-column field="date" header="Date"></p-column>
+            <p-column field="team1" header="Team 1">
+                <ng-template let-col let-match="rowData" pTemplate="body">
+                    <i class="fa fa-trophy fa-gold" *ngIf="match[col.field] === match.winner"></i>
+                    <span>{{match[col.field]}}</span>
+                </ng-template>
+            </p-column>
+            <p-column field="team2" header="Team 2">
+                <ng-template let-col let-match="rowData" pTemplate="body">
+                    <i class="fa fa-trophy fa-gold" *ngIf="match[col.field] === match.winner"></i>
+                    <span>{{match[col.field]}}</span>
+                </ng-template>
+            </p-column>
+            <p-column field="city" header="City"></p-column>
+        </p-dataTable>
+    </div>
+</div>

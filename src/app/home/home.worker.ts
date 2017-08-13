@@ -111,8 +111,6 @@ var dbUtility = (function () {
                 var range = IDBKeyRange.only(dbDetails.keyValue.toString());
                 var request = index.openCursor(range);
 
-                console.log('Reading....', request);
-
                 var records = [];
 
                 request.onsuccess = function (event) {
@@ -161,14 +159,20 @@ self.addEventListener('message', (message) => {
         }
     }
     else if (message.data.type === 'readAll') {
-        console.log('Read all....');
         dbUtility.readAll(message.data.dbDetails)
             .then(records => {
-                console.log(records);
                 postMessage(returnSuccess(records));
             })
             .catch(error => error);
     }
+    else if (message.data.type === 'pieChart') {
+        dbUtility.readAll(message.data.dbDetails)
+            .then(records => {
+                postMessage(returnSuccess(records));
+            })
+            .catch(error => error);
+    }
+
 });
 
 // dbUtility.readAll(dbDetails, {index: 'season', keyValue: 2011});

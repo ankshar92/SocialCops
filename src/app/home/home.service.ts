@@ -19,19 +19,22 @@ export class HomeService {
             this.http.get(details.path)
                 .map(response => response.text())
                 .subscribe(csvDetails => {
+                    var worker = this.worker;
 
-                    this.worker.addEventListener('message', (message => {
-                        console.log('Message returned...', message.data);
-                        this.worker.removeEventListener('message', null);
-                        if (message.data.status === 'Y') {
-                            resolve(message.data.message);
+                    function eventHandler(response) {
+                        worker.removeEventListener('message', eventHandler);
+
+                        if (response.data.status === 'Y') {
+                            resolve(response.data.message);
                         }
                         else {
-                            reject(message.data.message);
+                            reject(response.data.message);
                         }
-                    }));
+                    };
 
-                    this.worker.postMessage({
+                    worker.addEventListener('message', eventHandler);
+
+                    worker.postMessage({
                         type: 'save',
                         rows: csvDetails,
                         dbDetails: {
@@ -45,18 +48,28 @@ export class HomeService {
         });
     }
 
-    getTodaysMatches(details): Promise<Match[]> {
+    getRecords(details): Promise<Match[]> {
         return new Promise((resolve, reject) => {
-            this.worker.addEventListener('message', (response => {
-                this.worker.removeEventListener('message', null);
-                resolve(response.data.message);
-            }));
+            var worker = this.worker;
 
-            this.worker.postMessage({
+            function eventHandler(response) {
+                worker.removeEventListener('message', eventHandler);
+                if (response.data.status === 'Y') {
+                    resolve(response.data.message);
+                }
+                else {
+                    reject(response.data.message);
+                }
+            };
+
+            worker.addEventListener('message', eventHandler);
+
+            worker.postMessage({
                 type: 'readAll',
                 dbDetails: details
             });
         });
 
     }
+
 }

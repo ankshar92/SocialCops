@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { HomeService } from './home.service';
 
+import { Match } from '../models/Match';
+
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -9,7 +12,10 @@ import { HomeService } from './home.service';
 })
 export class HomeComponent implements OnInit {
 
-  todaysDate;
+  todaysDate: String;
+  season: String;
+  seasonMatches: Match[];
+  todaysMatches: Match[];
 
   constructor(private homeService: HomeService) { }
 
@@ -21,13 +27,51 @@ export class HomeComponent implements OnInit {
       id: 'id'
     })
       .then(message => {
-        console.log(message);
-        this.todaysDate = '22-05-2016';
+        this.initialiseData();
       })
       .catch(error => {
-        console.log(error);
-        this.todaysDate = '22-05-2016';
+        this.initialiseData();
+      });
+  };
+
+  initialiseData(): void {
+    this.todaysDate = '22-05-2016';
+    this.season = '2016';
+
+    this.getTodaysMatches(this.todaysDate);
+    setTimeout(() => {
+      this.getSeasonMatches(this.season);
+    }, 1000);
+  }
+
+  getTodaysMatches(todaysDate): void {
+    this.homeService.getRecords({
+      name: 'matches',
+      collection: 'matches',
+      index: 'date',
+      keyValue: todaysDate
+    })
+      .then(matches => {
+        this.todaysMatches = matches;
+      })
+      .catch(error => {
+        console.log('error in getting recs: ', error);
       })
   }
+
+  getSeasonMatches(season): void {
+    this.homeService.getRecords({
+      name: 'matches',
+      collection: 'matches',
+      index: 'season',
+      keyValue: season
+    })
+      .then(matches => {
+        this.seasonMatches = matches
+      })
+      .catch(error => {
+        console.log('error in getting recs: ', error);
+      })
+  };
 
 }
