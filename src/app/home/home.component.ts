@@ -74,4 +74,60 @@ export class HomeComponent implements OnInit {
       })
   };
 
+  pieChartData = [
+    {
+      key: "One",
+      y: 5
+    },
+    {
+      key: "Two",
+      y: 2
+    },
+    {
+      key: "Three",
+      y: 9
+    },
+    {
+      key: "Four",
+      y: 7
+    },
+    {
+      key: "Five",
+      y: 4
+    },
+    {
+      key: "Six",
+      y: 3
+    },
+    {
+      key: "Seven",
+      y: .5
+    }
+  ];
+
+  runRateData = [{
+    values: [{
+      x: 1,
+      y: 5
+    },
+    {
+      x: 2,
+      y: 2
+    },
+    {
+      x: 3,
+      y: 9
+    },
+    {
+      x: 4,
+      y: 7
+    },
+    {
+      x: 5,
+      y: 4
+    }],
+    key: 'Cosine Wave',
+    color: '#2ca02c'
+  }];
+
 }

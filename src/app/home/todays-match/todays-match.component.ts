@@ -11,6 +11,7 @@ import { Match } from '../../models/Match';
 })
 export class TodaysMatchComponent {
     @Input() matches: Match[];
+    @Input() date: String;
 
     checkValidity(number): boolean {
         return number > 0;
