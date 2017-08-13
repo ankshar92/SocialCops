@@ -1,4 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    background-color: #f1f1f1 !important;
+}
+
 .in-block {
     display: inline-block;
+}
+
+.tile {
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 5px 5px #aeaeae;
+    margin-top: 15px;
+}
+
+.success-text {
+    color: #23d160;
 }

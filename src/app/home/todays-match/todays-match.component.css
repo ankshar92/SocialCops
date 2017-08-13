@@ -1,0 +1,19 @@
+.match-info {
+    border-right: 1px solid #f1f1f1;
+    padding: 15px;
+}
+
+@media (max-width: 991px){
+    .match-info {
+        border-top: 1px solid #f1f1f1;
+        border-right: 0;
+    }
+}
+
+.match-info:last-child {
+    border-right: 0;
+}
+
+.match-info:first-child {
+    border-top: 0;
+}

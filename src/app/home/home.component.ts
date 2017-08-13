@@ -9,6 +9,8 @@ import { HomeService } from './home.service';
 })
 export class HomeComponent implements OnInit {
 
+  todaysDate;
+
   constructor(private homeService: HomeService) { }
 
   ngOnInit() {
@@ -17,7 +19,15 @@ export class HomeComponent implements OnInit {
       dbName: 'matches',
       collection: 'matches',
       id: 'id'
-    });
+    })
+      .then(message => {
+        console.log(message);
+        this.todaysDate = '22-05-2016';
+      })
+      .catch(error => {
+        console.log(error);
+        this.todaysDate = '22-05-2016';
+      })
   }
 
 }
