@@ -20,7 +20,7 @@ export class RunRateComponent implements OnInit {
         this.options = {
             chart: {
                 type: 'lineChart',
-                height: 500,
+                height: 470,
                 margin: {
                     top: 20,
                     right: 20,
@@ -30,12 +30,6 @@ export class RunRateComponent implements OnInit {
                 x: function (d) { return d.x; },
                 y: function (d) { return d.y; },
                 useInteractiveGuideline: true,
-                dispatch: {
-                    stateChange: function (e) { console.log("stateChange"); },
-                    changeState: function (e) { console.log("changeState"); },
-                    tooltipShow: function (e) { console.log("tooltipShow"); },
-                    tooltipHide: function (e) { console.log("tooltipHide"); }
-                },
                 xAxis: {
                     axisLabel: 'Overs'
                 },
@@ -45,9 +39,6 @@ export class RunRateComponent implements OnInit {
                         return d3.format('.02f')(d);
                     },
                     axisLabelDistance: -10
-                },
-                callback: function (chart) {
-                    console.log("!!! lineChart callback !!!");
                 }
             }
         }

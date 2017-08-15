@@ -22,10 +22,11 @@ export class PieChartComponent implements OnInit {
                 type: 'pieChart',
                 height: 500,
                 x: function (d) { return d.key; },
-                y: function (d) { return d.y; },
+                y: function (d) { return d.value; },
                 showLabels: true,
                 duration: 500,
                 labelThreshold: 0.01,
+                labelType: 'percent',
                 labelSunbeamLayout: true,
                 legend: {
                     margin: {

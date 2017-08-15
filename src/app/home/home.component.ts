@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { HomeService } from './home.service';
 
 import { Match } from '../models/Match';
+import { PieChart } from '../models/PieChart';
 
 
 @Component({
@@ -16,6 +17,7 @@ export class HomeComponent implements OnInit {
   season: String;
   seasonMatches: Match[];
   todaysMatches: Match[];
+  pieChartData: PieChart[];
 
   constructor(private homeService: HomeService) { }
 
@@ -39,6 +41,7 @@ export class HomeComponent implements OnInit {
     this.season = '2016';
 
     this.getTodaysMatches(this.todaysDate);
+
     setTimeout(() => {
       this.getSeasonMatches(this.season);
     }, 1000);
@@ -67,46 +70,24 @@ export class HomeComponent implements OnInit {
       keyValue: season
     })
       .then(matches => {
-        this.seasonMatches = matches
+        this.seasonMatches = matches;
+        this.preparePieChartData(matches);
       })
       .catch(error => {
         console.log('error in getting recs: ', error);
       })
   };
 
-  pieChartData = [
-    {
-      key: "One",
-      y: 5
-    },
-    {
-      key: "Two",
-      y: 2
-    },
-    {
-      key: "Three",
-      y: 9
-    },
-    {
-      key: "Four",
-      y: 7
-    },
-    {
-      key: "Five",
-      y: 4
-    },
-    {
-      key: "Six",
-      y: 3
-    },
-    {
-      key: "Seven",
-      y: .5
-    }
-  ];
+  preparePieChartData(matches): void {
+    this.pieChartData = this.homeService.preparePieChartData(matches);
+  }
 
   runRateData = [{
     values: [{
+      x: 0,
+      y: 0
+    },
+    {
       x: 1,
       y: 5
     },
@@ -126,7 +107,7 @@ export class HomeComponent implements OnInit {
       x: 5,
       y: 4
     }],
-    key: 'Cosine Wave',
+    key: 'Delhi Daredevils',
     color: '#2ca02c'
   }];
 

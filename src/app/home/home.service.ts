@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import * as workerPath from "file-loader?name=[name].js!./home.worker";
 
 import { Match } from '../models/Match';
+import { PieChart } from '../models/PieChart';
 
 @Injectable()
 export class HomeService {
@@ -70,6 +71,30 @@ export class HomeService {
             });
         });
 
+    }
+
+    preparePieChartData(matches: Match[]): PieChart[] {
+        let values = [],
+            pieChartData = [];
+
+        matches.forEach(element => {
+            if (isNaN(values[<string>element.winner])) {
+                values[<string>element.winner] = 1;
+            }
+            else {
+                values[<string>element.winner]++;
+            }
+        })
+
+        for (var key in values) {
+            console.log('key: ', key);
+            pieChartData.push({
+                key: key,
+                value: values[key]
+            });
+        }
+
+        return pieChartData;
     }
 
 }
