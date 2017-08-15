@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { HomeService } from './home.service';
 
@@ -23,9 +24,19 @@ export class HomeComponent implements OnInit {
 
   downloadingDeliveries: Boolean = true;
 
-  constructor(private homeService: HomeService) { }
+  constructor(
+    private homeService: HomeService,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
+
+    this.route.paramMap
+      .subscribe(params => {
+        this.todaysDate = params.get('todaysDate');
+        this.season = params.get('season');
+      })
+
     let p1 = new Promise((resolve, reject) => {
       this.homeService.populateData({
         path: 'assets/data/matches.csv',
@@ -63,9 +74,6 @@ export class HomeComponent implements OnInit {
   };
 
   initialiseData(resolve, reject): void {
-    this.todaysDate = '22-05-2016';
-    this.season = '2016';
-
     this.getTodaysMatches(this.todaysDate, resolve, reject);
 
     setTimeout(() => {

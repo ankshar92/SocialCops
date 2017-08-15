@@ -5,6 +5,10 @@ import { HomeComponent } from '../home/home.component';
 
 const routes: Routes = [{
     path: '',
+    redirectTo: '/dashboard/2016/22-05-2016',
+    pathMatch: 'full'
+}, {
+    path: 'dashboard/:season/:todaysDate',
     component: HomeComponent
 }];
 
