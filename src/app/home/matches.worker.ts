@@ -55,13 +55,11 @@ var dbUtility = (function () {
                 let request = indexedDB.open(dbDetails.name, 1);
 
                 request.onerror = function (event) {
-                    console.log("Error opening Indexed DB: ", event);
                     reject('Error opening Indexed DB');
                 };
 
                 request.onsuccess = function (event) {
                     _db = request.result;
-                    console.log("Opened Indexed DB: " + _db);
                     resolve();
                 };
 
@@ -69,9 +67,7 @@ var dbUtility = (function () {
                     _db = event.target;
                     _db = _db.result;
 
-                    console.log('\n\nUPGRADE NEEDED...\n\n')
-
-                    var objectStore = _db.createObjectStore(dbDetails.collection, { keyPath: dbDetails.id });
+                    var objectStore = _db.createObjectStore(dbDetails.collection, { keyPath: dbDetails.id, autoIncrement: true });
 
                     objectStore.createIndex("season", "season", { unique: false });
                     objectStore.createIndex("date", "date", { unique: false });
@@ -97,7 +93,7 @@ var dbUtility = (function () {
                     };
 
                     request.onerror = function (event) {
-                        reject(`Error in saving index ${index}`);
+                        reject(`Records already saved...`);
                     }
                 });
             });
@@ -106,7 +102,7 @@ var dbUtility = (function () {
             return new Promise((resolve, reject) => {
                 var transaction = _db.transaction([dbDetails.collection], "readwrite");
                 var objectStore = transaction.objectStore(dbDetails.collection);
-                var request = objectStore.openCursor(IDBKeyRange.only("101"));
+
                 var index = objectStore.index(dbDetails.index);
                 var range = IDBKeyRange.only(dbDetails.keyValue.toString());
                 var request = index.openCursor(range);
@@ -122,6 +118,10 @@ var dbUtility = (function () {
                         resolve(records);
                     }
                 };
+                request.onerror = function (event) {
+                    console.log('event', event);
+                };
+
             });
         }
     }
@@ -139,11 +139,9 @@ self.addEventListener('message', (message) => {
                     .then(response => {
                         dbUtility.saveCollection(dbDetails, json)
                             .then(message => {
-                                console.log('Save Collection: ', message);
                                 postMessage(returnSuccess(message));
                             })
                             .catch(error => {
-                                console.log('Error in save collection: ', error);
                                 postMessage(returnError(error));
                             });
                     })
@@ -151,7 +149,6 @@ self.addEventListener('message', (message) => {
                         postMessage(returnError(message));
                     });
             } catch (error) {
-                console.log(error.stack);
                 postMessage(returnError(error.message));
             }
         } else {
@@ -163,7 +160,9 @@ self.addEventListener('message', (message) => {
             .then(records => {
                 postMessage(returnSuccess(records));
             })
-            .catch(error => error);
+            .catch(error => {
+                return error;
+            });
     }
     else if (message.data.type === 'pieChart') {
         dbUtility.readAll(message.data.dbDetails)
@@ -174,5 +173,3 @@ self.addEventListener('message', (message) => {
     }
 
 });
-
-// dbUtility.readAll(dbDetails, {index: 'season', keyValue: 2011});

@@ -27,8 +27,8 @@ export class RunRateComponent implements OnInit {
                     bottom: 40,
                     left: 55
                 },
-                x: function (d) { return d.x; },
-                y: function (d) { return d.y; },
+                x: function (d) { return d.over; },
+                y: function (d) { return d.runRate; },
                 useInteractiveGuideline: true,
                 xAxis: {
                     axisLabel: 'Overs'

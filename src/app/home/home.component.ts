@@ -4,6 +4,7 @@ import { HomeService } from './home.service';
 
 import { Match } from '../models/Match';
 import { PieChart } from '../models/PieChart';
+import { RunRate } from '../models/RunRate';
 
 
 @Component({
@@ -18,36 +19,58 @@ export class HomeComponent implements OnInit {
   seasonMatches: Match[];
   todaysMatches: Match[];
   pieChartData: PieChart[];
+  runRateData: RunRate[];
 
   constructor(private homeService: HomeService) { }
 
   ngOnInit() {
-    this.homeService.populateData({
-      path: 'assets/data/matches.csv',
-      dbName: 'matches',
-      collection: 'matches',
-      id: 'id'
-    })
-      .then(message => {
-        this.initialiseData();
+    let p1 = new Promise((resolve, reject) => {
+      this.homeService.populateData({
+        path: 'assets/data/matches.csv',
+        dbName: 'matches',
+        collection: 'matches',
+        id: 'id'
       })
-      .catch(error => {
-        this.initialiseData();
-      });
+        .then(message => {
+          this.initialiseData(resolve, reject);
+        })
+        .catch(error => {
+          this.initialiseData(resolve, reject);
+        });
+    });
+
+    let p2 = new Promise((resolve, reject) => {
+      this.homeService.initialiseDeliveryWorker('assets/data/deliveries.csv')
+        .then(message => {
+          resolve();
+        })
+        .catch(error => {
+          reject();
+        });
+    });
+
+    Promise.all([p1, p2])
+      .then(() => {
+        this.calculateRunRate(this.todaysMatches[0].id);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
   };
 
-  initialiseData(): void {
+  initialiseData(resolve, reject): void {
     this.todaysDate = '22-05-2016';
     this.season = '2016';
 
-    this.getTodaysMatches(this.todaysDate);
+    this.getTodaysMatches(this.todaysDate, resolve, reject);
 
     setTimeout(() => {
       this.getSeasonMatches(this.season);
     }, 1000);
   }
 
-  getTodaysMatches(todaysDate): void {
+  getTodaysMatches(todaysDate, resolve, reject): void {
     this.homeService.getRecords({
       name: 'matches',
       collection: 'matches',
@@ -56,9 +79,11 @@ export class HomeComponent implements OnInit {
     })
       .then(matches => {
         this.todaysMatches = matches;
+        resolve();
       })
       .catch(error => {
         console.log('error in getting recs: ', error);
+        reject();
       })
   }
 
@@ -82,33 +107,12 @@ export class HomeComponent implements OnInit {
     this.pieChartData = this.homeService.preparePieChartData(matches);
   }
 
-  runRateData = [{
-    values: [{
-      x: 0,
-      y: 0
-    },
-    {
-      x: 1,
-      y: 5
-    },
-    {
-      x: 2,
-      y: 2
-    },
-    {
-      x: 3,
-      y: 9
-    },
-    {
-      x: 4,
-      y: 7
-    },
-    {
-      x: 5,
-      y: 4
-    }],
-    key: 'Delhi Daredevils',
-    color: '#2ca02c'
-  }];
+  calculateRunRate(matchId): void {
+    this.homeService.calculateRunRate(matchId)
+      .then(runRateData => {
+        this.runRateData = runRateData
+      })
+      .catch(err => console.log(err));
+  }
 
 }

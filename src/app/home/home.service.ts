@@ -3,15 +3,18 @@ import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/map';
 
-import * as workerPath from "file-loader?name=[name].js!./home.worker";
+import * as matchesWorkerPath from "file-loader?name=[name].js!./matches.worker";
+import * as deliveriesWorkerPath from "file-loader?name=[name].js!./deliveries.worker";
 
 import { Match } from '../models/Match';
 import { PieChart } from '../models/PieChart';
+import { RunRate } from '../models/RunRate';
 
 @Injectable()
 export class HomeService {
 
-    worker: Worker = new Worker(workerPath);
+    matchesWorker: Worker = new Worker(matchesWorkerPath);
+    deliveriesWorker: Worker = new Worker(deliveriesWorkerPath);
 
     constructor(private http: Http) { };
 
@@ -20,7 +23,7 @@ export class HomeService {
             this.http.get(details.path)
                 .map(response => response.text())
                 .subscribe(csvDetails => {
-                    var worker = this.worker;
+                    var worker = this.matchesWorker;
 
                     function eventHandler(response) {
                         worker.removeEventListener('message', eventHandler);
@@ -51,7 +54,7 @@ export class HomeService {
 
     getRecords(details): Promise<Match[]> {
         return new Promise((resolve, reject) => {
-            var worker = this.worker;
+            var worker = this.matchesWorker;
 
             function eventHandler(response) {
                 worker.removeEventListener('message', eventHandler);
@@ -87,7 +90,6 @@ export class HomeService {
         })
 
         for (var key in values) {
-            console.log('key: ', key);
             pieChartData.push({
                 key: key,
                 value: values[key]
@@ -95,6 +97,51 @@ export class HomeService {
         }
 
         return pieChartData;
+    }
+
+    initialiseDeliveryWorker(path): Promise<String> {
+        return new Promise((resolve, reject) => {
+            let worker = this.deliveriesWorker;
+
+            function eventHandler(response) {
+                worker.removeEventListener('message', eventHandler);
+                if (response.data) {
+                    resolve();
+                } else {
+                    reject();
+                }
+            }
+
+            worker.addEventListener('message', eventHandler);
+
+            this.http.get(path)
+                .map(response => response.text())
+                .subscribe(csv => {
+                    worker.postMessage({
+                        type: 'setData',
+                        csv: csv
+                    });
+                })
+
+        })
+    }
+
+    calculateRunRate(matchId): Promise<RunRate[]> {
+        return new Promise((resolve, reject) => {
+            let worker = this.deliveriesWorker;
+
+            function eventHandler(response) {
+                worker.removeEventListener('message', eventHandler);
+                resolve(response.data);
+            }
+
+            worker.addEventListener('message', eventHandler);
+
+            worker.postMessage({
+                type: 'runRate',
+                matchId: matchId
+            });
+        });
     }
 
 }
