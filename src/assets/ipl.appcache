@@ -1,15 +1,15 @@
 CACHE MANIFEST
 # v1 2015-08-15
 
-#/index.html
+/index.html
 /assets/data/matches.csv
-#/assets/data/deliveries.csv
-#/inline.bundle.js
-#/polyfills.bundle.js
-#/styles.bundle.js
-#/vendor.bundle.js
-#/main.bundle.js
-#/matches.worker.js
+/assets/data/deliveries.csv
+/inline.bundle.js
+/polyfills.bundle.js
+/styles.bundle.js
+/vendor.bundle.js
+/main.bundle.js
+/matches.worker.js
 
 NETWORK:
 *
