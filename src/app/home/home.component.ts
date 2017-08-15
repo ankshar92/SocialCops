@@ -21,6 +21,8 @@ export class HomeComponent implements OnInit {
   pieChartData: PieChart[];
   runRateData: RunRate[];
 
+  downloadingDeliveries: Boolean = true;
+
   constructor(private homeService: HomeService) { }
 
   ngOnInit() {
@@ -51,6 +53,7 @@ export class HomeComponent implements OnInit {
 
     Promise.all([p1, p2])
       .then(() => {
+        this.downloadingDeliveries = false;
         this.calculateRunRate(this.todaysMatches[0].id);
       })
       .catch(err => {

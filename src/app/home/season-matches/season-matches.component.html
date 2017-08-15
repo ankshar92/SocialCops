@@ -5,7 +5,11 @@
     <div class="col-xs-12 col-sm-6 col-md-4">
         <input #globalFilter type="text" placeholder="Search" class="col-xs-12">
     </div>
-    <div class="col-xs-12">
+
+    <div class="clearfix"></div>
+    <app-loader [show]="!matches"></app-loader>
+
+    <div class="col-xs-12 season-matches">
         <p-dataTable [value]="matches" [globalFilter]="globalFilter">
             <p-column field="date" header="Date"></p-column>
             <p-column field="team1" header="Team 1">

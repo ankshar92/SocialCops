@@ -14,6 +14,7 @@ import { TodaysMatchComponent } from './todays-match/todays-match.component';
 import { SeasonMatchesComponent } from './season-matches/season-matches.component';
 import { PieChartComponent } from './d3-components/pie-chart.component';
 import { RunRateComponent } from './d3-components/run-rate.component';
+import { AppLoader } from './loader/loader.component';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { RunRateComponent } from './d3-components/run-rate.component';
         TodaysMatchComponent,
         SeasonMatchesComponent,
         PieChartComponent,
-        RunRateComponent
+        RunRateComponent,
+        AppLoader
     ],
     imports: [
         CommonModule,

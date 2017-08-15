@@ -5,8 +5,7 @@
             <p>
                 <b class="text-uppercase">
                     {{match.team1}}
-                </b> 
-                vs
+                </b> vs
                 <b class="text-uppercase">
                     {{match.team2}}
                 </b>
@@ -24,6 +23,7 @@
             </p>
         </div>
     </div>
+    <app-loader [show]="!matches"></app-loader>
     <div class="clearfix"></div>
     <small class="text-muted">Note: Assuming today's date is {{date}}.</small>
 </div>

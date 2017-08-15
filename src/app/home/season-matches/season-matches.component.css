@@ -1,0 +1,9 @@
+.season-matches {
+    margin-top: 15px;
+}
+
+@media (max-width: 767px) {
+    .season-matches {
+        word-wrap: break-word;
+    }
+}

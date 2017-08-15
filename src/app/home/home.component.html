@@ -8,6 +8,7 @@
         <div class="tile">
             <h4 class="text-uppercase text-muted">Winners of the Season</h4>
             <app-pie-chart [pieChartData]=pieChartData></app-pie-chart>
+            <app-loader [show]="!pieChartData"></app-loader>
         </div>
     </div>
     <div class="col-xs-12 col-md-6">
@@ -17,6 +18,7 @@
                 <p>{{todaysMatches[0].team1}} vs {{todaysMatches[0].team2}} on {{todaysMatches[0].date}}</p>
                 <app-run-rate [runRateData]=runRateData></app-run-rate>
             </div>
+            <app-loader [show]="downloadingDeliveries"></app-loader>
         </div>
     </div>
 </div>
