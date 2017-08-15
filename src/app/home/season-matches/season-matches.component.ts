@@ -11,5 +11,6 @@ import { Match } from '../../models/Match';
 })
 export class SeasonMatchesComponent {
     @Input() matches: Match[];
+    @Input() season: String;
 
 }
