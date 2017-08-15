@@ -12,9 +12,11 @@
     </div>
     <div class="col-xs-12 col-md-6">
         <div class="tile">
-            <h4 class="text-uppercase text-muted text-sm">Run Rate</h4>
-            <p>{{todaysMatches[0].team1}} vs {{todaysMatches[0].team2}} on {{todaysMatches[0].date}}</p>
-            <app-run-rate [runRateData]=runRateData></app-run-rate>
+            <div *ngIf="todaysMatches">
+                <h4 class="text-uppercase text-muted text-sm">Run Rate</h4>
+                <p>{{todaysMatches[0].team1}} vs {{todaysMatches[0].team2}} on {{todaysMatches[0].date}}</p>
+                <app-run-rate [runRateData]=runRateData></app-run-rate>
+            </div>
         </div>
     </div>
 </div>
