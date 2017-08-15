@@ -64,8 +64,10 @@ export class HomeComponent implements OnInit {
 
     Promise.all([p1, p2])
       .then(() => {
+        if (this.todaysMatches && this.todaysMatches.length) {
+          this.calculateRunRate(this.todaysMatches[0].id);
+        }
         this.downloadingDeliveries = false;
-        this.calculateRunRate(this.todaysMatches[0].id);
       })
       .catch(err => {
         console.log(err);
